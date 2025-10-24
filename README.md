@@ -1,62 +1,147 @@
-# Express.js RESTful API Assignment
+Express.js RESTful API – Products
+Overview
 
-This assignment focuses on building a RESTful API using Express.js, implementing proper routing, middleware, and error handling.
+This project is a RESTful API built using Express.js that manages a products resource. It includes CRUD operations, middleware for logging, authentication, validation, error handling, and advanced features like filtering, pagination, search, and product statistics.
 
-## Assignment Overview
+Project Setup
+Requirements
 
-You will:
-1. Set up an Express.js server
-2. Create RESTful API routes for a product resource
-3. Implement custom middleware for logging, authentication, and validation
-4. Add comprehensive error handling
-5. Develop advanced features like filtering, pagination, and search
+Node.js v18 or higher
 
-## Getting Started
+npm
 
-1. Accept the GitHub Classroom assignment invitation
-2. Clone your personal repository that was created by GitHub Classroom
-3. Install dependencies:
-   ```
-   npm install
-   ```
-4. Run the server:
-   ```
-   npm start
-   ```
+Postman, Insomnia, or curl (for testing API endpoints)
 
-## Files Included
+Installation
+# Clone the repository
+git clone <your-repo-url>
+cd <project-folder>
 
-- `Week2-Assignment.md`: Detailed assignment instructions
-- `server.js`: Starter Express.js server file
-- `.env.example`: Example environment variables file
+# Install dependencies
+npm install
 
-## Requirements
+# Create a .env file based on .env.example
+cp .env.example .env
 
-- Node.js (v18 or higher)
-- npm or yarn
-- Postman, Insomnia, or curl for API testing
+Running the Server
+# Start the server
+node server.js
 
-## API Endpoints
 
-The API will have the following endpoints:
+The server runs by default on http://localhost:3000
 
-- `GET /api/products`: Get all products
-- `GET /api/products/:id`: Get a specific product
-- `POST /api/products`: Create a new product
-- `PUT /api/products/:id`: Update a product
-- `DELETE /api/products/:id`: Delete a product
+The root endpoint returns:
 
-## Submission
+GET / 
+Response: "Hello World"
 
-Your work will be automatically submitted when you push to your GitHub Classroom repository. Make sure to:
+Environment Variables
 
-1. Complete all the required API endpoints
-2. Implement the middleware and error handling
-3. Document your API in the README.md
-4. Include examples of requests and responses
+Create a .env file and define:
 
-## Resources
+PORT=3000
+API_KEY=your_api_key_here
 
-- [Express.js Documentation](https://expressjs.com/)
-- [RESTful API Design Best Practices](https://restfulapi.net/)
-- [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) 
+API Endpoints
+1. Products CRUD
+Method	Endpoint	Description	Body / Query Parameters
+GET	/api/products	List all products	Optional query: category, page, limit
+GET	/api/products/:id	Get a single product	id – product ID
+POST	/api/products	Create a new product	JSON body: name, description, price, category, inStock
+PUT	/api/products/:id	Update an existing product	JSON body: same as POST
+DELETE	/api/products/:id	Delete a product	id – product ID
+2. Advanced Features
+Method	Endpoint	Description	Query Parameters / Notes
+GET	/api/products/search	Search products by name	name – partial or full product name
+GET	/api/products/stats	Get product statistics by category	None
+
+Filtering & Pagination Example:
+
+GET /api/products?category=Electronics&page=1&limit=5
+
+3. Middleware
+
+Logger – logs request method, URL, and timestamp.
+
+Authentication – checks for x-api-key header.
+
+Validation – validates product creation & update data.
+
+Error Handling – global error handling with proper status codes.
+
+4. Example Requests & Responses
+
+Create Product
+
+POST /api/products
+Headers: { "x-api-key": "your_api_key" }
+Body:
+{
+  "name": "iPhone 15",
+  "description": "Latest Apple smartphone",
+  "price": 1200,
+  "category": "Electronics",
+  "inStock": true
+}
+
+
+Response:
+
+{
+  "id": "a1b2c3d4",
+  "name": "iPhone 15",
+  "description": "Latest Apple smartphone",
+  "price": 1200,
+  "category": "Electronics",
+  "inStock": true
+}
+
+
+Search Products
+
+GET /api/products/search?name=iphone
+Headers: { "x-api-key": "your_api_key" }
+
+
+Response:
+
+[
+  {
+    "id": "a1b2c3d4",
+    "name": "iPhone 15",
+    "description": "Latest Apple smartphone",
+    "price": 1200,
+    "category": "Electronics",
+    "inStock": true
+  }
+]
+
+
+Get Product Stats
+
+GET /api/products/stats
+Headers: { "x-api-key": "your_api_key" }
+
+
+Response:
+
+{
+  "Electronics": 5,
+  "Clothing": 3,
+  "Books": 7
+}
+
+Folder Structure
+project-root/
+│
+├─ server.js
+├─ routes/
+│   └─ products.js
+├─ middleware/
+│   ├─ logger.js
+│   ├─ auth.js
+│   ├─ validateProduct.js
+│   └─ errorHandler.js
+├─ package.json
+├─ .env.example
+└─ README.md
